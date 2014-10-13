@@ -16,7 +16,6 @@ function wrap_dhamma( $page ) {
 		case 'goenka' :
 		case 'art' :
 		case 'qanda' :
-		case 'schedules/schdhara' :
 		case 'dscode' :
 			$url = 'http://www.dhamma.org/en/' . $page . "?raw";
 			$text_to_output = pull_page( $url );
