@@ -3,9 +3,7 @@
 Plugin Name: wrap-dhamma-org
 Description: retrieves, re-formats, and emits HTML for selected pages from www.dhamma.org
 Version: 2.0
-Revised: 2014/10/12 - JDH
-Author: Jeremy Dunn <jeremy.j.dunn@gmail.com>, 
-Contributor: Joshua Hartwell <JHartwell@gmail.com>
+Authors: Joshua Hartwell <JHartwell@gmail.com> & Jeremy Dunn <jeremy.j.dunn@gmail.com> 
 */
 
 function wrap_dhamma( $page ) {
@@ -41,27 +39,19 @@ function wrap_dhamma( $page ) {
 }
 
 function pull_page ( $url ) {
-
 	$raw = file_get_contents ( $url );
-	
 	$raw = fixURLs ( $raw );
 	$raw = stripH1 ( $raw );
 	$raw = stripHR ( $raw );
 	$raw = changeTag ( $raw, "h3", "h2" );
 	$raw = changeTag ( $raw, "h4", "h3" );
 	$raw = fixGoenkaImages ( $raw );
-	
 	return $raw;
 }
 
-
-
 function pull_video_page ( $url ) {
-	
 	$raw = file_get_contents ( $url );
-	
 	$raw = getBodyContent ( $raw );
-		
 	$raw = stripH1 ( $raw );
 	$raw = stripHR ( $raw );
 	$raw = stripTableTags ( $raw );
@@ -69,12 +59,8 @@ function pull_video_page ( $url ) {
 	$raw = fixVideoURLS ( $raw );
 	$raw = fixBlueBallImages ( $raw );
 	$raw = stripHomeLink ( $raw );
-	
 	return $raw;
-
 }
-
-
 
 function fixURLs ( $raw ) {
 	$raw = str_replace('<a href="art">', '<a href="' . get_option('home') . '/about-vipassana/art/">', $raw);
@@ -125,13 +111,11 @@ function stripTableTags ( $raw ) {
 	$raw = preg_replace("@</*?tr.*?>@si", '', $raw); 
 	$raw = preg_replace("@</*?td.*?>@si", '', $raw);
 	return $raw;
-	
 }
 
 function stripExessVideoLineBreaks ( $raw ) {
 	$raw = preg_replace( "@\n@si", '', $raw ); 
 	$raw = preg_replace( "@[ ]+@", ' ', $raw ); 
-	
 	return $raw;
 }
 
@@ -141,22 +125,18 @@ function getBodyContent ( $raw ) {
 	$nohead = substr($raw, $bodypos + 6); // strip <body> tag as well
 	$bodyendpos = strpos($nohead, '</body>');
 	$raw = substr($nohead, 1, ($bodyendpos -1));
-	
 	return $raw;
 }
 
 function fixBlueBallImages ( $raw ) {
 	$raw = preg_replace ( '#<IMG SRC="/images/icons/blueball.gif">#si', '', $raw );
-	
 	return $raw;
 }
 
 function stripHomeLink ( $raw ) {
 	$raw = preg_replace ( "#Download a free copy of <a href='http://www.real.com'>RealPlayer</a>.#si", "", $raw );
 	$raw = preg_replace ( "#<br/> <a href='http://www.dhamma.org/'><img style='border:0' src='/images/icons/home.gif' alt=' '></A>#si", "", $raw );
-
 	return $raw;
-
 }
 	
 ?>
