@@ -2,7 +2,7 @@
 /*
 Plugin Name: wrap-dhamma-org
 Description: retrieves, re-formats, and emits HTML for selected pages from www.dhamma.org
-Version: 2.0
+Version: 3.0
 Authors: Joshua Hartwell <JHartwell@gmail.com> & Jeremy Dunn <jeremy.j.dunn@gmail.com> 
 */
 
@@ -23,6 +23,11 @@ function wrap_dhamma( $page ) {
 			$url = 'http://video.server.dhamma.org/video/';
 			$text_to_output = pull_video_page( $url );
 			break;
+
+      case 'osguide' :
+			$url = 'http://www.dhamma.org/en/' . $page . "?raw";
+			$text_to_output = pull_page( $url );
+			break;
 			
 		default:
 			die ( "invalid page '".$page."'" );
@@ -31,8 +36,10 @@ function wrap_dhamma( $page ) {
 	
 	// emit the required comment
 	echo '<!-- ' . $url . ' has been dynamically reformatted on ' . date("D M  j G:i s Y T") . '. -->';
-	// emit the reformatted page between center tags
+
+	// emit the reformatted page
 	echo $text_to_output;
+
 	echo '<!-- end dynamically generated content.-->';
 	// we're done
 	
