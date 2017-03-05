@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: wrap-dhamma-org
-Description: retrieves, re-formats, and emits HTML for selected pages from www.dhamma.org
+Description: retrieves, re-formats, and emits HTML for selected pages from www.dhamma.org 
 Version: 3.0
 Authors: Joshua Hartwell <JHartwell@gmail.com> & Jeremy Dunn <jeremy.j.dunn@gmail.com> 
 */
@@ -70,11 +70,11 @@ function pull_video_page ( $url ) {
 }
 
 function fixURLs ( $raw ) {
-	$raw = str_replace('<a href="art">', '<a href="' . get_option('home') . '/about-vipassana/art/">', $raw);
-	$raw = str_replace("<a href=\"goenka\">", "<a href=\"" . get_option('home') . "/about-vipassana/goenka/\">", $raw);
-	$raw = preg_replace("#<a href=[\"']/?code/?[\"']>#", "<a href=\"" . get_option('home') . "/about-vipassana/code/\">", $raw);
-	$raw = str_replace("<a href=\"vipassana\">", "<a href=\"" . get_option('home') . "/about-vipassana/vipassana/\">", $raw);
-	$raw = str_replace("<a href='vipassana'>", "<a href=\"" . get_option('home') . "/about-vipassana/vipassana/\">", $raw);
+	$raw = str_replace('<a href="art">', '<a href="' . get_option('home') . '/about/art-of-living/">', $raw);
+	$raw = str_replace("<a href=\"goenka\">", "<a href=\"" . get_option('home') . "/about/goenka/\">", $raw);
+	$raw = preg_replace("#<a href=[\"']/?code/?[\"']>#", "<a href=\"" . get_option('home') . "/courses/code/\">", $raw);
+	$raw = str_replace("<a href=\"vipassana\">", "<a href=\"" . get_option('home') . "/about/vipassana/\">", $raw);
+	$raw = str_replace("<a href='vipassana'>", "<a href=\"" . get_option('home') . "/about/vipassana/\">", $raw);
 	$raw = str_replace("<a href='/bycountry/'>", "<a target=\"_blank\" href=\"http://courses.dhamma.org/en-US/schedules/schdhara\">", $raw);
 	$raw = str_replace("<a href='/'>", "<a href=\"" . get_option('home') . "\">", $raw);
 	$raw = str_replace("<a href='/docs/core/code-en.pdf'>here</a>", "<a href='http://www.dhamma.org/en/docs/core/code-en.pdf'>here</a>", $raw);
