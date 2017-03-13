@@ -111,7 +111,7 @@ function fixGoenkaImages ( $raw ) {
 	$raw = str_replace('Photo courtesy Beliefnet, Inc.', '<p style="text-align:center">Photo courtesy Beliefnet, Inc.</p>', $raw);
    
     $dir = plugin_dir_path( __FILE__ );  
-    $raw = str_replace ( 'https://www.dhamma.org/assets/sng/sng-f01f4d6595afa4ab14edced074a7e45c.gif', '/wp-content/plugins/wrap-dhamma-org/goenka.png', $raw );
+    $raw = str_replace ( 'src="https://www.dhamma.org/assets/sng/sng-f01f4d6595afa4ab14edced074a7e45c.gif"', 'id="goenka-image" src="/wp-content/plugins/wrap-dhamma-org/goenka.png"', $raw );
     return $raw;
 }
 
