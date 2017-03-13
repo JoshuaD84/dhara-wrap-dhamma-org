@@ -70,11 +70,11 @@ function pull_video_page ( $url ) {
 }
 
 function fixURLs ( $raw ) {
-	$raw = str_replace('<a href="art">', '<a href="' . get_option('home') . '/about-vipassana/art/">', $raw);
-	$raw = str_replace("<a href=\"goenka\">", "<a href=\"" . get_option('home') . "/about-vipassana/goenka/\">", $raw);
-	$raw = preg_replace("#<a href=[\"']/?code/?[\"']>#", "<a href=\"" . get_option('home') . "/about-vipassana/code/\">", $raw);
-	$raw = str_replace("<a href=\"vipassana\">", "<a href=\"" . get_option('home') . "/about-vipassana/vipassana/\">", $raw);
-	$raw = str_replace("<a href='vipassana'>", "<a href=\"" . get_option('home') . "/about-vipassana/vipassana/\">", $raw);
+	$raw = str_replace('<a href="art">', '<a href="' . get_option('home') . '/about/art-of-living/">', $raw);
+	$raw = str_replace("<a href=\"goenka\">", "<a href=\"" . get_option('home') . "/about/goenka/\">", $raw);
+	$raw = preg_replace("#<a href=[\"']/?code/?[\"']>#", "<a href=\"" . get_option('home') . "/courses/code/\">", $raw);
+	$raw = str_replace("<a href=\"vipassana\">", "<a href=\"" . get_option('home') . "/about/vipassana/\">", $raw);
+	$raw = str_replace("<a href='vipassana'>", "<a href=\"" . get_option('home') . "/about/vipassana/\">", $raw);
 	$raw = str_replace("<a href='/bycountry/'>", "<a target=\"_blank\" href=\"http://courses.dhamma.org/en-US/schedules/schdhara\">", $raw);
 	$raw = str_replace("<a href='/'>", "<a href=\"" . get_option('home') . "\">", $raw);
 	$raw = str_replace("<a href='/docs/core/code-en.pdf'>here</a>", "<a href='http://www.dhamma.org/en/docs/core/code-en.pdf'>here</a>", $raw);
@@ -109,8 +109,10 @@ function fixGoenkaImages ( $raw ) {
 	$raw = str_replace('class="www-float-right-bottom"', "align='right'", $raw);
 	$raw = str_replace('<img alt="S. N. Goenka at U.N."', '<img alt="S. N. Goenka at U.N." style="display: block; margin-left: auto; margin-right: auto;"', $raw);
 	$raw = str_replace('Photo courtesy Beliefnet, Inc.', '<p style="text-align:center">Photo courtesy Beliefnet, Inc.</p>', $raw);
-	
-	return $raw;
+   
+    $dir = plugin_dir_path( __FILE__ );  
+    $raw = str_replace ( 'https://www.dhamma.org/assets/sng/sng-f01f4d6595afa4ab14edced074a7e45c.gif', '/wp-content/plugins/wrap-dhamma-org/goenka.png', $raw );
+    return $raw;
 }
 
 function stripTableTags ( $raw ) {
