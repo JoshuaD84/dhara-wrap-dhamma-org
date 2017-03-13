@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: wrap-dhamma-org
-Description: retrieves, re-formats, and emits HTML for selected pages from www.dhamma.org
+Description: retrieves, re-formats, and emits HTML for selected pages from www.dhamma.org 
 Version: 3.0
 Authors: Joshua Hartwell <JHartwell@gmail.com> & Jeremy Dunn <jeremy.j.dunn@gmail.com> 
 */
