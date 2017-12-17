@@ -3,37 +3,32 @@
 Plugin Name: wrap-dhamma-org
 Description: retrieves, re-formats, and emits HTML for selected pages from www.dhamma.org 
 Version: 3.0
-Authors: Joshua Hartwell <JHartwell@gmail.com> & Jeremy Dunn <jeremy.j.dunn@gmail.com> 
+Authors: Joshua Hartwell <JHartwell@gmail.com> & Jeremy Dunn <jeremy.j.dunn@gmail.com>
 */
 
 function wrap_dhamma( $page ) {
 	// validate page
 	switch ( $page ) {
-		case 'vipassana' :
-		case 'code' :
-		case 'goenka' :
-		case 'art' :
-		case 'qanda' :
-		case 'dscode' :
+		case 'vipassana':
+		case 'code':
+		case 'goenka':
+		case 'art':
+		case 'qanda':
+		case 'dscode':
+        case 'osguide':
 			$url = 'http://www.dhamma.org/en/' . $page . "?raw";
 			$text_to_output = pull_page( $url );
 			break;
-			
-		case 'video' :
+
+		case 'video':
 			$url = 'http://video.server.dhamma.org/video/';
 			$text_to_output = pull_video_page( $url );
 			break;
 
-      case 'osguide' :
-			$url = 'http://www.dhamma.org/en/' . $page . "?raw";
-			$text_to_output = pull_page( $url );
-			break;
-			
 		default:
 			die ( "invalid page '".$page."'" );
-			
 	}
-	
+
 	// emit the required comment
 	echo '<!-- ' . $url . ' has been dynamically reformatted on ' . date("D M  j G:i s Y T") . '. -->';
 
@@ -42,7 +37,6 @@ function wrap_dhamma( $page ) {
 
 	echo '<!-- end dynamically generated content.-->';
 	// we're done
-	
 }
 
 function pull_page ( $url ) {
@@ -87,44 +81,43 @@ function fixVideoURLS ( $raw ) {
 }
 
 function stripH1( $raw ) {
-	return preg_replace('@<h1[^>]*?>.*?<\/h1>@si', '', $raw); //This isn't a great solution, not very dynamic, but it gets the job done. 
+	return preg_replace('@<h1[^>]*?>.*?<\/h1>@si', '', $raw); //This isn't a great solution, not very dynamic, but it gets the job done.
 }
 
 function stripHR ( $raw ) {
-	return preg_replace("@<hr.*?>@si", '', $raw); 
+	return preg_replace("@<hr.*?>@si", '', $raw);
 }
 
 function changeTag ( $source, $oldTag, $newTag ) {
-	$source = preg_replace( "@<{$oldTag}>@si", "<{$newTag}>", $source ); 
-	$source = preg_replace( "@</{$oldTag}>@si", "</{$newTag}>", $source ); 
+	$source = preg_replace( "@<{$oldTag}>@si", "<{$newTag}>", $source );
+	$source = preg_replace( "@</{$oldTag}>@si", "</{$newTag}>", $source );
 	return $source;
 }
 
 function fixGoenkaImages ( $raw ) {
-
 	//Make the Goenkaji images work - JDH 10/12/2014
 	$raw = preg_replace( '#/images/sng/#si', 'https://www.dhamma.org/images/sng/', $raw );
-		
+
 	//Make the goenka images inline - JDH 10/12/2014
 	$raw = str_replace('class="www-float-right-bottom"', "align='right'", $raw);
 	$raw = str_replace('<img alt="S. N. Goenka at U.N."', '<img alt="S. N. Goenka at U.N." style="display: block; margin-left: auto; margin-right: auto;"', $raw);
 	$raw = str_replace('Photo courtesy Beliefnet, Inc.', '<p style="text-align:center">Photo courtesy Beliefnet, Inc.</p>', $raw);
-   
+
     $dir = plugin_dir_path( __FILE__ );  
     $raw = str_replace ( 'src="https://www.dhamma.org/assets/sng/sng-f01f4d6595afa4ab14edced074a7e45c.gif"', 'id="goenka-image" src="/wp-content/plugins/wrap-dhamma-org/goenka.png"', $raw );
     return $raw;
 }
 
 function stripTableTags ( $raw ) {
-	$raw = preg_replace("@</*?table.*?>@si", '', $raw); 
-	$raw = preg_replace("@</*?tr.*?>@si", '', $raw); 
+	$raw = preg_replace("@</*?table.*?>@si", '', $raw);
+	$raw = preg_replace("@</*?tr.*?>@si", '', $raw);
 	$raw = preg_replace("@</*?td.*?>@si", '', $raw);
 	return $raw;
 }
 
 function stripExessVideoLineBreaks ( $raw ) {
-	$raw = preg_replace( "@\n@si", '', $raw ); 
-	$raw = preg_replace( "@[ ]+@", ' ', $raw ); 
+	$raw = preg_replace( "@\n@si", '', $raw );
+	$raw = preg_replace( "@[ ]+@", ' ', $raw );
 	return $raw;
 }
 
@@ -147,5 +140,5 @@ function stripHomeLink ( $raw ) {
 	$raw = preg_replace ( "#<br/> <a href='http://www.dhamma.org/'><img style='border:0' src='/images/icons/home.gif' alt=' '></A>#si", "", $raw );
 	return $raw;
 }
-	
+
 ?>
