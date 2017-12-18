@@ -64,13 +64,20 @@ function pull_video_page ( $url ) {
 }
 
 function fixURLs ( $raw ) {
-	$raw = str_replace('<a href="art">', '<a href="' . get_option('home') . '/about/art-of-living/">', $raw);
-	$raw = str_replace("<a href=\"goenka\">", "<a href=\"" . get_option('home') . "/about/goenka/\">", $raw);
-	$raw = preg_replace("#<a href=[\"']/?code/?[\"']>#", "<a href=\"" . get_option('home') . "/courses/code/\">", $raw);
-	$raw = str_replace("<a href=\"vipassana\">", "<a href=\"" . get_option('home') . "/about/vipassana/\">", $raw);
-	$raw = str_replace("<a href='vipassana'>", "<a href=\"" . get_option('home') . "/about/vipassana/\">", $raw);
+    $LOCAL_URLS = array(
+	   'art' => '/about/art-of-living/',
+	   'goenka' => '/about/goenka/',
+	   'vipassana' => '/about/vipassana/',
+	   '/' => '',
+    );
+
+    foreach ( $LOCAL_URLS as $from => $to ) {
+	   $raw = str_replace('<a href="' . $from . '">', '<a href="' . get_option('home') . $to . '">', $raw);
+	   $raw = str_replace("<a href='" . $from . "'>", '<a href="' . get_option('home') . $to . '">', $raw);
+	}
+
+	$raw = preg_replace("#<a href=[\"']/?code/?[\"']>#", '<a href="' . get_option('home') . '/courses/code/">', $raw);
 	$raw = str_replace("<a href='/bycountry/'>", "<a target=\"_blank\" href=\"http://courses.dhamma.org/en-US/schedules/schdhara\">", $raw);
-	$raw = str_replace("<a href='/'>", "<a href=\"" . get_option('home') . "\">", $raw);
 	$raw = str_replace("<a href='/docs/core/code-en.pdf'>here</a>", "<a href='http://www.dhamma.org/en/docs/core/code-en.pdf'>here</a>", $raw);
 	return $raw;
 }
