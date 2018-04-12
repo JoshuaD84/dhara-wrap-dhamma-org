@@ -16,6 +16,7 @@ function wrap_dhamma( $page ) {
 		case 'qanda':
 		case 'dscode':
         case 'osguide':
+        case 'privacy':
 			$url = 'http://www.dhamma.org/en/' . $page . "?raw";
 			$text_to_output = pull_page( $url );
 			break;
