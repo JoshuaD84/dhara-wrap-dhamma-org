@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: wrap-dhamma-org
-Description: retrieves, re-formats, and emits HTML for selected pages from www.dhamma.org 
+Description: retrieves, re-formats, and emits HTML for selected pages from www.dhamma.org
 Version: 3.0
 Authors: Joshua Hartwell <JHartwell@gmail.com> & Jeremy Dunn <jeremy.j.dunn@gmail.com>
 
@@ -18,7 +18,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>
 */
 
-function wrap_dhamma( $page ) {
+function wrap_dhamma( $page, $lang = null ) {
+	$lang = isset($lang) ? $lang : substr(get_bloginfo('language'), 0, 2);
 	// validate page
 	switch ( $page ) {
 		case 'vipassana':
@@ -27,10 +28,10 @@ function wrap_dhamma( $page ) {
 		case 'art':
 		case 'qanda':
 		case 'dscode':
-        case 'osguide':
-        case 'privacy':
-			$url = 'http://www.dhamma.org/en/' . $page . "?raw";
-			$text_to_output = pull_page( $url );
+		case 'osguide':
+		case 'privacy':
+			$url = 'http://www.dhamma.org/' . $lang . '/' . $page . "?raw";
+			$text_to_output = pull_page( $url, $lang );
 			break;
 
 		case 'video':
@@ -52,9 +53,9 @@ function wrap_dhamma( $page ) {
 	// we're done
 }
 
-function pull_page ( $url ) {
+function pull_page ( $url, $lang ) {
 	$raw = file_get_contents ( $url );
-	$raw = fixURLs ( $raw );
+	$raw = fixURLs ( $raw, $lang );
 	$raw = stripH1 ( $raw );
 	$raw = stripHR ( $raw );
 	$raw = changeTag ( $raw, "h3", "h2" );
@@ -76,22 +77,23 @@ function pull_video_page ( $url ) {
 	return $raw;
 }
 
-function fixURLs ( $raw ) {
-    $LOCAL_URLS = array(
-	   'art' => '/about/art-of-living/',
-	   'goenka' => '/about/goenka/',
-	   'vipassana' => '/about/vipassana/',
-	   '/' => '',
-    );
+function fixURLs ( $raw, $lang ) {
+	$LOCAL_URLS = array(
+		'art' => '/about/art-of-living/',
+		'goenka' => '/about/goenka/',
+		'vipassana' => '/about/vipassana/',
+		'/' => '',
+	);
 
-    foreach ( $LOCAL_URLS as $from => $to ) {
-	   $raw = str_replace('<a href="' . $from . '">', '<a href="' . get_option('home') . $to . '">', $raw);
-	   $raw = str_replace("<a href='" . $from . "'>", '<a href="' . get_option('home') . $to . '">', $raw);
+	foreach ( $LOCAL_URLS as $from => $to ) {
+		$raw = str_replace('<a href="' . $from . '">', '<a href="' . get_option('home') . $to . '">', $raw);
+		$raw = str_replace("<a href='" . $from . "'>", '<a href="' . get_option('home') . $to . '">', $raw);
 	}
 
 	$raw = preg_replace("#<a href=[\"']/?code/?[\"']>#", '<a href="' . get_option('home') . '/courses/code/">', $raw);
 	$raw = str_replace("<a href='/bycountry/'>", "<a target=\"_blank\" href=\"http://courses.dhamma.org/en-US/schedules/schdhara\">", $raw);
-	$raw = str_replace("<a href='/docs/core/code-en.pdf'>here</a>", "<a href='http://www.dhamma.org/en/docs/core/code-en.pdf'>here</a>", $raw);
+	$raw = str_replace("<a href='/docs/core/code-" . $lang . ".pdf'>here</a>",
+		"<a href='https://www.dhamma.org/" . $lang . "/docs/core/code-" . $lang . ".pdf'>here</a>", $raw);
 	return $raw;
 }
 
@@ -123,9 +125,9 @@ function fixGoenkaImages ( $raw ) {
 	$raw = str_replace('<img alt="S. N. Goenka at U.N."', '<img alt="S. N. Goenka at U.N." style="display: block; margin-left: auto; margin-right: auto;"', $raw);
 	$raw = str_replace('Photo courtesy Beliefnet, Inc.', '<p style="text-align:center">Photo courtesy Beliefnet, Inc.</p>', $raw);
 
-    $dir = plugin_dir_path( __FILE__ );  
-    $raw = str_replace ( 'src="https://www.dhamma.org/assets/sng/sng-f01f4d6595afa4ab14edced074a7e45c.gif"', 'id="goenka-image" src="/wp-content/plugins/wrap-dhamma-org/goenka.png"', $raw );
-    return $raw;
+	$dir = plugin_dir_path( __FILE__ );
+	$raw = str_replace ( 'src="https://www.dhamma.org/assets/sng/sng-f01f4d6595afa4ab14edced074a7e45c.gif"', 'id="goenka-image" src="/wp-content/plugins/wrap-dhamma-org/goenka.png"', $raw );
+	return $raw;
 }
 
 function stripTableTags ( $raw ) {
