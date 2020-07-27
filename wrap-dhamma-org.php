@@ -2,7 +2,7 @@
 /*
 Plugin Name: wrap-dhamma-org
 Description: retrieves, re-formats, and emits HTML for selected pages from www.dhamma.org
-Version: 3.0
+Version: 3.01
 Authors: Joshua Hartwell <JHartwell@gmail.com> & Jeremy Dunn <jeremy.j.dunn@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
@@ -30,12 +30,12 @@ function wrap_dhamma( $page, $lang = null ) {
 		case 'dscode':
 		case 'osguide':
 		case 'privacy':
-			$url = 'http://www.dhamma.org/' . $lang . '/' . $page . "?raw";
+			$url = 'https://www.dhamma.org/' . $lang . '/' . $page . "?raw";
 			$text_to_output = pull_page( $url, $lang );
 			break;
 
 		case 'video':
-			$url = 'http://video.server.dhamma.org/video/';
+			$url = 'https://video.server.dhamma.org/video/';
 			$text_to_output = pull_video_page( $url );
 			break;
 
@@ -54,13 +54,11 @@ function wrap_dhamma( $page, $lang = null ) {
 }
 
 function pull_page ( $url, $lang ) {
-	$raw = file_get_contents ( $url );
-	$raw = fixURLs ( $raw, $lang );
+    $raw = file_get_contents ( $url );
+    if ($raw === false) {
+       echo "Error retrieving content.";
+    }
 	$raw = stripH1 ( $raw );
-	$raw = stripHR ( $raw );
-	$raw = changeTag ( $raw, "h3", "h2" );
-	$raw = changeTag ( $raw, "h4", "h3" );
-	$raw = fixGoenkaImages ( $raw );
 	return $raw;
 }
 
